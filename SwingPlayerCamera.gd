@@ -19,8 +19,8 @@ func _ready():
 func _input(event :InputEvent):
 	# This section controls your player camera. Sensitivity can be changed.
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		cam.rotate_x(event.relative.y * MOUSE_SENSITIVITY * -1)
-		self.rotate_y(event.relative.x * MOUSE_SENSITIVITY * -1)
+		cam.rotate_x(event.relative.y * MOUSE_SENSITIVITY/100 * -1)
+		self.rotate_y(event.relative.x * MOUSE_SENSITIVITY/100 * -1)
 
 		var camera_rot = cam.rotation
 		camera_rot.x = clampf(camera_rot.x, -1.4, 1.4)
