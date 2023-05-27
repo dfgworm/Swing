@@ -8,7 +8,7 @@ var Rope = preload("res://Rope.cs")
 @onready
 var cam :Camera3D = $Camera3D
 @onready
-var rope :Node3D = $Rope
+var rope :Node3D = $Camera3D/Rope
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)

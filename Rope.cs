@@ -13,15 +13,48 @@ public partial class Rope : Node3D
     [Export]
     public float forcePerStretchUnit = 10;
     [Export]
-    public bool enabled = true;
+    public bool enabled = false;
+    Node3D mesh;
+    Node3D jointMesh;
+    public override void _Ready()
+    {
+        base._Ready();
+        mesh = (Node3D)this.FindChild("RopeMesh");
+        this.RemoveChild(mesh);
+        jointMesh = (Node3D)this.FindChild("JointMesh");
+        this.RemoveChild(jointMesh);
+    }
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        if (!enabled) {
+            if (this.IsAncestorOf(mesh))
+                this.RemoveChild(mesh);
+            if (this.IsAncestorOf(jointMesh))
+                this.RemoveChild(jointMesh);
+            return;
+        }
+        if (!this.IsAncestorOf(mesh))
+            this.AddChild(mesh);
+        if (!this.IsAncestorOf(jointMesh))
+            this.AddChild(jointMesh);
+        jointMesh.GlobalPosition = attachmentPoint;
+        mesh.GlobalPosition = (GlobalPosition + attachmentPoint)/2;
+        Vector3 dir = attachmentPoint - GlobalPosition;
+        Vector3 cross = dir.Cross(Vector3.Down);
+        if (cross == Vector3.Zero)
+            cross = Vector3.Left;
+        mesh.GlobalTransform = mesh.GlobalTransform.LookingAt(mesh.GlobalPosition+cross, dir);
+        mesh.Scale = new Vector3(1, dir.Length(),1);
+    }
     public override void _PhysicsProcess(double doubledelta)
     {
         base._PhysicsProcess(doubledelta);
         float delta = (float)doubledelta;
         if (enabled)
-            UpdateSwinging(delta);
+            UpdateRopePull(delta);
     }
-    void UpdateSwinging(float delta) {
+    void UpdateRopePull(float delta) {
         Vector3 currentDirection = attachmentPoint - GlobalPosition;
         float currentLength = currentDirection.Length();
         Vector3 ropeForceDirection = currentDirection.Normalized();

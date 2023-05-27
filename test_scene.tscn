@@ -1,10 +1,27 @@
-[gd_scene load_steps=8 format=3 uid="uid://bhml075hkmfmi"]
+[gd_scene load_steps=12 format=3 uid="uid://bhml075hkmfmi"]
 
 [ext_resource type="Script" path="res://CharacterController.cs" id="1_8dirp"]
 [ext_resource type="Script" path="res://SwingPlayerCamera.gd" id="2_4mn6t"]
 [ext_resource type="Script" path="res://Rope.cs" id="3_g5h6t"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ua40q"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wp780"]
+albedo_color = Color(0.505882, 0.278431, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uqkja"]
+material = SubResource("StandardMaterial3D_wp780")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vso7i"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ddjy5"]
+material = SubResource("StandardMaterial3D_vso7i")
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gg17t"]
 albedo_color = Color(0.396078, 0.941176, 0.678431, 1)
@@ -32,10 +49,16 @@ script = ExtResource("2_4mn6t")
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/FPSCam"]
 
-[node name="Rope" type="Node3D" parent="CharacterBody3D/FPSCam"]
+[node name="Rope" type="Node3D" parent="CharacterBody3D/FPSCam/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.31183)
 script = ExtResource("3_g5h6t")
 baseLength = 8.0
-enabled = false
+
+[node name="RopeMesh" type="MeshInstance3D" parent="CharacterBody3D/FPSCam/Camera3D/Rope"]
+mesh = SubResource("CylinderMesh_uqkja")
+
+[node name="JointMesh" type="MeshInstance3D" parent="CharacterBody3D/FPSCam/Camera3D/Rope"]
+mesh = SubResource("SphereMesh_ddjy5")
 
 [node name="floor" type="MeshInstance3D" parent="."]
 transform = Transform3D(52.6813, 0, 0, 0, 1, 0, 0, 0, 49.5646, -2, -8.58784, -12)
